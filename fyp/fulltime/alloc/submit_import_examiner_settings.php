@@ -35,7 +35,14 @@ if (isset($_FILES["FileToUpload_ExaminerSettings"])) {
         // echo $target_file;
         if ($inputFileType == "xlsx" || $inputFileType == "xls" || $inputFileType == "csv") {
             if (move_uploaded_file($_FILES["FileToUpload_ExaminerSettings"]["tmp_name"][$i], $target_file)) {
-                // do nothing
+                $duplicate = explode(".", $_FILES["FileToUpload_ExaminerSettings"]["name"][$i])[0];
+                //echo $duplicate;
+                //Remove all old files with duplicate name to update the latest files
+                foreach (glob($target_dir . $duplicate . "*.*") as $filename) {
+                    if($filename != $target_file){
+                        unlink($filename);
+                    }
+                }
             } else {
                 $error_code = 3;    // File is open
             }
