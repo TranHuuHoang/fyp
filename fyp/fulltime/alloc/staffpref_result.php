@@ -38,8 +38,8 @@ $_REQUEST['csrf'] 	= $csrf->cfmRequest();
 $sem1Array = array("Jul", "Aug","Sep","Oct","Nov","Dec");
 $sem2Array = array("Jan","Feb","Mar", "Apr", "May", "Jun");
 
-$currentYrSem1 = date("y") . (date("y") + 1);
-$currentYrSem2 = (date("y")-1) . date("y");
+$currentYrSem1 = date("Y");
+$currentYrSem2 = date("Y")-1;
 
 // Get current year and semester
 if (in_array(date("M"), $sem1Array)) {
@@ -69,32 +69,41 @@ if (in_array($month, $sem2Array) && in_array($month, $sem2Array)) {
 */
 
 // initialize array for filter
-$CurrentYear = sprintf("%02d", substr(date("Y"), -2));
+// $CurrentYear = sprintf("%02d", substr(date("Y"), -2));
+// //$LastestYear = sprintf("%02d", substr(date("Y")-1, -2));
+// if ($sem == 1) {
+//     $LastestYear = sprintf("%02d", substr(date("Y"), -2));
+// }
+// else
+//     $LastestYear = sprintf("%02d", substr(date("Y")-1, -2));
+
+// Change year format from 1920 to 2019
+$CurrentYear = date("Y");
 //$LastestYear = sprintf("%02d", substr(date("Y")-1, -2));
 if ($sem == 1) {
-    $LastestYear = sprintf("%02d", substr(date("Y"), -2));
+    $LastestYear = $CurrentYear;
 }
 else
-    $LastestYear = sprintf("%02d", substr(date("Y")-1, -2));
+    $LastestYear = $CurrentYear - 1;
 
 $EarlistYear = $CurrentYear - 5;
 $filterArray = array();
 
 foreach (range($LastestYear, $EarlistYear) as $i) {
-    $l = $i + 1;
+    //$l = $i + 1;
 
     if ($i == $LastestYear) {
         if ($sem == 1) {
-            array_push($filterArray, "Yr " . $i . $l . " Sem 1");
+            array_push($filterArray, "Yr " . $i . " Sem 1");
         }
         else {
-            array_push($filterArray, "Yr " . $i . $l . " Sem 2");
-            array_push($filterArray, "Yr " . $i . $l . " Sem 1");
+            array_push($filterArray, "Yr " . $i . " Sem 2");
+            array_push($filterArray, "Yr " . $i . " Sem 1");
         }
     }
     else {
-        array_push($filterArray, "Yr " . $i . $l . " Sem 2");
-        array_push($filterArray, "Yr " . $i . $l . " Sem 1");
+        array_push($filterArray, "Yr " . $i . " Sem 2");
+        array_push($filterArray, "Yr " . $i . " Sem 1");
     }
 }
 

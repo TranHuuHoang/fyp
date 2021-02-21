@@ -58,16 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_SERVER['QUERY_STRING'])) {
           if(($nmonth >= 01) && ($nmonth <= 06)){
               $projectCurrentYear = date("Y", $time);
               $projectPreviousYear = $projectCurrentYear - 1;
-              $projectCurrentYearSub = substr($projectCurrentYear, 2, 4);
-              $projectPreviousYearSub = substr($projectPreviousYear, 2, 4);
-              $filter_ProjectYear = $projectPreviousYearSub . $projectCurrentYearSub;
+            //   $projectCurrentYearSub = substr($projectCurrentYear, 2, 4);
+            //   $projectPreviousYearSub = substr($projectPreviousYear, 2, 4);
+              $filter_ProjectYear = $projectPreviousYear;
           }
           elseif(($nmonth >= 07) && ($nmonth <= 12)){
               $projectCurrentYear = date("Y", $time);
-              $projectNextYear = $projectCurrentYear + 1;
-              $projectCurrentYearSub = substr($projectCurrentYear, 2, 4);
-              $projectNextYearSub = substr($projectNextYear, 2, 4);
-              $filter_ProjectYear = $projectCurrentYearSub . $projectNextYearSub;
+            //   $projectNextYear = $projectCurrentYear + 1;
+            //   $projectCurrentYearSub = substr($projectCurrentYear, 2, 4);
+            //   $projectNextYearSub = substr($projectNextYear, 2, 4);
+              $filter_ProjectYear = $projectCurrentYear;
           }
       }
 
@@ -441,13 +441,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_SERVER['QUERY_STRING'])) {
                                           <select id="filter_ProjectYear" name="filter_ProjectYear" onchange="this.form.submit()">
                                                 <option value="">SELECT</option>
                                                 <?php
-                                                $CurrentYear = sprintf("%02d", substr(date("Y"), -2));
-                                                $LastestYear = sprintf("%02d", substr(date("Y"), -2));
+                                                // $CurrentYear = sprintf("%02d", substr(date("Y"), -2));
+                                                // $LastestYear = sprintf("%02d", substr(date("Y"), -2));
+
+                                                // Change Year format: from 1920 to 2019
+                                                $CurrentYear = date("Y");
+                                                $LastestYear = date("Y");
                                                 $EarlistYear = $CurrentYear - 10;
 
                                                        // Loops over each int[year] from current year, back to the $earliest_year [1950]
                                                 foreach ( range( $LastestYear, $EarlistYear ) as $i ) {
-                                                      $i = sprintf("%02d", substr($i, -2)) . (sprintf("%02d", (substr($i, -2)+1)));
+                                                      //$i = sprintf("%02d", substr($i, -2)) . (sprintf("%02d", (substr($i, -2)+1)));
 
                                                       if(isset($_REQUEST["filter_ProjectYear"]) && $_REQUEST["filter_ProjectYear"] == $i){
                                                             echo "<option selected value='".$i."'>".$i."</option>";

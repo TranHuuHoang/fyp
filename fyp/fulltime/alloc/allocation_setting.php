@@ -67,11 +67,20 @@ if ($rooms_day3 != null || sizeof($rooms_day3) > 0) {
 }
 
 // Exam Year & Sem settings
-$YEAR_RANGE = 505;
-$today = new DateTime();
-$curWorkYear = $today->format('Y') % 100 - 1;
+// $YEAR_RANGE = 505;
+// $today = new DateTime();
+// $curWorkYear = $today->format('Y') % 100 - 1;
 
-$examYearValue = $curWorkYear * 100 + ($curWorkYear + 1); // Default Year
+// $examYearValue = $curWorkYear * 100 + ($curWorkYear + 1); // Default Year
+// $examYearStart = $examYearValue - $YEAR_RANGE; // Current Year
+// $examYearEnd = $examYearValue + $YEAR_RANGE;
+
+// Change Year format: from 1920 to 2019
+$YEAR_RANGE = 5;
+$today = new DateTime();
+
+$examYearValue = $today->format('Y'); // Default Year
+
 $examYearStart = $examYearValue - $YEAR_RANGE; // Current Year
 $examYearEnd = $examYearValue + $YEAR_RANGE;
 
@@ -111,19 +120,19 @@ $roomCount_day1 = max($count_day1, $MIN_ROOMS);
 $roomCount_day2 = max($count_day2, $MIN_ROOMS);
 $roomCount_day3 = max($count_day3, $MIN_ROOMS);
 
-function yearToStr($yearInput) {
-	$yr1 = round($yearInput / 100, 0, PHP_ROUND_HALF_DOWN);
-	$yr2 = $yearInput % 100;
-	return $yr1 . '/' . $yr2;
-}
+// function yearToStr($yearInput) {
+// 	$yr1 = round($yearInput / 100, 0, PHP_ROUND_HALF_DOWN);
+// 	$yr2 = $yearInput % 100;
+// 	return $yr1 . '/' . $yr2;
+// }
 
 function generateYearSelect($id, $selected) {
 	global $examYearStart, $examYearEnd;
 
 	echo '<select id = "' . $id . '" name = "' . $id . '">';
-	for ($curYear = $examYearStart; $curYear <= $examYearEnd; $curYear += 101) {
+	for ($curYear = $examYearStart; $curYear <= $examYearEnd; $curYear += 1) {
 		$isSelected = ($curYear == $selected) ? "selected" : "";
-		echo '<option value = "' . $curYear . '"' . $isSelected . '>' . yearToStr($curYear) . '</option>';
+		echo '<option value = "' . $curYear . '"' . $isSelected . '>' . $curYear . '</option>';
 	}
 	echo '</select>';
 }

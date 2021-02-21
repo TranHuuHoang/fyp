@@ -43,6 +43,22 @@ $search = '';
 $maxRows_rsStaff = 15;
 $pageNum_rsStaff = 0;
 
+$date = date("M");
+if(!isset($_REQUEST["filter_Sem"]) )
+{
+  if($date == "Jan" || $date == "Feb" || $date =="Mar" ||$date == "Apr" || $date =="May" ||$date == "Jun" ||$date == "Jul")
+  {
+
+      $_POST["semester"] = 2;
+      $_SESSION["semester"] =2;
+  }else if( $date == "Aug" || $date == "Sep" || $date == "Oct"  || $date == "Nov" || $date == "Dec" )
+  {
+    $_SESSION["semester"] = 1;
+      $_POST["semester"]= 1;
+  }
+}
+
+
 
 if (isset($_POST['pageNum_rsStaff'])) {
     $pageNum_rsStaff = $_POST['pageNum_rsStaff'];
@@ -280,7 +296,18 @@ $conn_db_ntu = null;
                                     <?php
                                     $currentYear = sprintf("%04d", substr(date("Y"), 0));
                                     $earliestYear = $currentYear - 10;
-
+                                    if(!isset($_REQUEST["filter_Year"]) )
+                                    {
+                                      if($_SESSION["semester"] == 2)
+                                      {
+                                          //$_REQUEST["filter_Year"] = $currentYear -1;
+                                          $_SESSION["year"] =$currentYear-1;
+                                      }else if( $_SESSION["semester"]= 1)
+                                      {
+                                        //  $_REQUEST["filter_Year"] = $currentYear;
+                                          $_SESSION["year"] =$currentYear;
+                                      }
+                                    }
                                     // Loops over each int[year] from current year, back to the $earliest_year [1950]
                                     foreach (range($currentYear, $earliestYear) as $i) {
 
@@ -302,6 +329,7 @@ $conn_db_ntu = null;
                         </tr>
 
                         <tr><?php
+
                             if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
                             if (isset($_POST["filter_Sem"]) && $_POST["filter_Sem"] == 2 ||(isset($_SESSION["semester"]) && $_SESSION["semester"] == 2))
                                 echo "<td colspan='5'>Please select <b><u>examiner list,</u></b> <b><u>exemption</u></b> and <b><u>master</u></b> files to upload:</td>";
@@ -312,6 +340,7 @@ $conn_db_ntu = null;
                         </tr>
                         <tr>
                             <?php
+
                             if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
                             if (isset($_REQUEST["filter_Sem"]) && $_REQUEST["filter_Sem"] == 2 || (isset($_SESSION["semester"]) && $_SESSION["semester"] == 2) )
                                 echo "<td colspan='5'>File Name format: <b>examiner_list.xlsx</b>, <b>exemption.xlsx</b> & <b>master.xlsx</b></td>";
@@ -380,19 +409,27 @@ $conn_db_ntu = null;
                             // display every file...
                             for (var FileIndex = 0; FileIndex < FileToUpload_ExaminerSettings.files.length; FileIndex++) {
                                 //add to list
+
                                 var li = document.createElement('li');
                                 li.innerHTML = 'File ' + (FileIndex + 1) + ':  ' + FileToUpload_ExaminerSettings.files[FileIndex].name;
                                 Filename = FileToUpload_ExaminerSettings.files[FileIndex].name.substr(0, FileToUpload_ExaminerSettings.files[FileIndex].name.indexOf('.'));
                                 FileExtension = FileToUpload_ExaminerSettings.files[FileIndex].name.substr(FileToUpload_ExaminerSettings.files[FileIndex].name.indexOf('.'));
 
+
                                 if (Filename.toLowerCase() == "examiner_list" && (FileExtension.toLowerCase() == ".xlsx" || FileExtension.toLowerCase() == ".xls" || FileExtension.toLowerCase() == ".csv")) {
                                     li.innerHTML += " (Valid)";
                                     li.setAttribute("style", "list-style-type: none; color: green;");
-                                } else if ((selected == "2" && Filename.toLowerCase() == "exemption" && (FileExtension.toLowerCase() == ".xlsx" || FileExtension.toLowerCase() == ".xls" || FileExtension.toLowerCase() == ".csv")) || (selected =="2" && Filename.toLowerCase() == "master"
+
+
+                                }
+                                else if ((selected == 2 && Filename.toLowerCase() == "exemption" && (FileExtension.toLowerCase() == ".xlsx" || FileExtension.toLowerCase() == ".xls" || FileExtension.toLowerCase() == ".csv")) || (selected ==2 && Filename.toLowerCase() == "master"
                                     && (FileExtension.toLowerCase() == ".xlsx" || FileExtension.toLowerCase() == ".xls" || FileExtension.toLowerCase() == ".csv"))) {
+
                                     li.innerHTML += " (Valid)";
                                     li.setAttribute("style", "list-style-type: none; color: green;");
+
                                 } else {
+
                                     li.setAttribute("style", "list-style-type: none; color: red;");
                                     li.innerHTML += " (Invalid)";
                                 }
@@ -400,13 +437,14 @@ $conn_db_ntu = null;
                             }
 
                             // Rewrite codes to include checking of file extension, original code is below
-                            if (selected == "1" && FileToUpload_ExaminerSettings.files[0].name.toLowerCase().includes("examiner_list") && FileToUpload_ExaminerSettings.files.length == 1
+                            if (selected == 1 && FileToUpload_ExaminerSettings.files[0].name.toLowerCase().includes("examiner_list") && FileToUpload_ExaminerSettings.files.length == 1
                                 && (FileToUpload_ExaminerSettings.files[0].name.substr(FileToUpload_ExaminerSettings.files[0].name.indexOf('.')) == ".xlsx" || FileToUpload_ExaminerSettings.files[0].name.substr(FileToUpload_ExaminerSettings.files[0].name.indexOf('.')) == ".xls"
                                     || FileToUpload_ExaminerSettings.files[0].name.substr(FileToUpload_ExaminerSettings.files[0].name.indexOf('.')) == ".csv")) {
                                 IsValidFileUpload = true;
                             }
-                            else if (selected == "2" && FileToUpload_ExaminerSettings.files.length == 3) {
+                            else if (selected == 2 && FileToUpload_ExaminerSettings.files.length == 3) {
                                 // Check if the 3 files uploaded are the correct files
+
                                 for (var FileIndex = 0; FileIndex < FileToUpload_ExaminerSettings.files.length; FileIndex++) {
 
                                     // Get file name
@@ -567,7 +605,7 @@ $conn_db_ntu = null;
                           Wee Teck Zong [12.06.2020]
                           - Check current month of the year and checked if filtered sem has been set through dropdownlist
                           **If you don't check if it's set through Dropdownlist, the sem will keep stuck at current month's semester since everytime you filter the dropdownlist this code will be runned**
-                          - If not set through dropdownlist, auto set it to sem 1 if current month is Jan-Jul and sem 2 if current month is Aug - Dec
+                          - If not set through dropdownlist, auto set it to sem 2 if current month is Jan-Jul and sem 1 if current month is Aug - Dec
                           - */
                           $date = date("M");
                           if(!isset($_REQUEST["filter_Sem"]) )
@@ -575,11 +613,11 @@ $conn_db_ntu = null;
                             if($date == "Jan" || $date == "Feb" || $date =="Mar" ||$date == "Apr" || $date =="May" ||$date == "Jun" ||$date == "Jul")
                             {
 
-                                $_SESSION["semester"] = 1;
+                                $_SESSION["semester"] = 2;
                             }else if( $date == "Aug" || $date == "Sep" || $date == "Oct"  || $date == "Nov" || $date == "Dec" )
                             {
 
-                                $_SESSION["semester"]= 2;
+                                $_SESSION["semester"]= 1;
                             }
                           }
 

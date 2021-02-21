@@ -77,8 +77,12 @@ else {
 			$sem2Array = array("Jan","Feb","Mar", "Apr", "May", "Jun");
 
 			// Get current year to get latest open period
-			$currentYrSem1 = substr($tempStartDate[0], -2) . (substr($tempStartDate[0], -2) + 1);
-			$currentYrSem2 = (substr($tempStartDate[0], -2) -1) . (substr($tempStartDate[0], -2));//substr($tempStartDate[0], -2);
+			// $currentYrSem1 = substr($tempStartDate[0], -2) . (substr($tempStartDate[0], -2) + 1);
+			// $currentYrSem2 = (substr($tempStartDate[0], -2) -1) . (substr($tempStartDate[0], -2));//substr($tempStartDate[0], -2);
+
+			// Change Year format from 1920 to 2019
+			$currentYrSem1 = $tempStartDate[0];
+			$currentYrSem2 = $tempStartDate[0] - 1;
 
 			if (in_array(date('M', mktime(0, 0, 0, $tempStartDate[1], 10)), $sem1Array) && in_array(date('M', mktime(0, 0, 0, $tempEndDate[1], 10)), $sem1Array)) {
 					$currentYrSem = "Yr " . $currentYrSem1 . " Sem 1";
@@ -92,8 +96,12 @@ else {
 			$query_rsSettings = "SELECT * FROM ".$TABLES['allocation_settings_others']." WHERE type= 'FT'";
 			$settings 	= $conn_db_ntu->query($query_rsSettings)->fetch();
 
-			$originalYrSem1 = (date("y", strtotime($settings['pref_start']))) . (date("y", strtotime($settings['pref_start']))+1);
-			$originalYrSem2 = (date("y", strtotime($settings['pref_start']))-1) . (date("y", strtotime($settings['pref_start'])));
+			// $originalYrSem1 = (date("y", strtotime($settings['pref_start']))) . (date("y", strtotime($settings['pref_start']))+1);
+			// $originalYrSem2 = (date("y", strtotime($settings['pref_start']))-1) . (date("y", strtotime($settings['pref_start'])));
+
+			// Change Year format from 1920 to 2019
+			$originalYrSem1 = date("Y", strtotime($settings['pref_start']));
+			$originalYrSem2 = date("Y", strtotime($settings['pref_start']))-1;
 
 			// Get the month of the original open period
 			if (in_array(date("M", strtotime($settings['pref_start'])), $sem1Array) && in_array(date("M", strtotime($settings['pref_end'])), $sem1Array)) {

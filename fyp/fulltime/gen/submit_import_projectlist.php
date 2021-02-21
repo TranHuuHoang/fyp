@@ -118,17 +118,23 @@ function HandleExcelData($objPHPExcel){
 		{
 				$proj_id 		= trim($AllDataInSheet[$row]["B"]);
 
-				$startYear_tmp 	= trim($AllDataInSheet[$row]["C"]);
-				$startYear_1 	= (int)(substr($startYear_tmp, -2));
-				$startYear_2 	= $startYear_1 + 1;
-				$startYear 		= $startYear_1 . $startYear_2;
+				// Changes to follow Year convention: 2019 instead of 1920
+				
+				// $startYear_tmp 	= trim($AllDataInSheet[$row]["C"]);
+				// $startYear_1 	= (int)(substr($startYear_tmp, -2));
+				// $startYear_2 	= $startYear_1 + 1;
+				// $startYear 		= $startYear_1 . $startYear_2;
+
+				$startYear 	= trim($AllDataInSheet[$row]["C"]);
 
 				$startSem 		= trim($AllDataInSheet[$row]["D"]);
 
-				$examineYear_tmp 	= trim($AllDataInSheet[$row]["E"]);
-				$examineYear_1 		= (int)(substr($examineYear_tmp, -2));
-				$examineYear_2 		= $examineYear_1 + 1;
-				$examineYear 		= $examineYear_1 . $examineYear_2;
+				// $examineYear_tmp 	= trim($AllDataInSheet[$row]["E"]);
+				// $examineYear_1 		= (int)(substr($examineYear_tmp, -2));
+				// $examineYear_2 		= $examineYear_1 + 1;
+				// $examineYear 		= $examineYear_1 . $examineYear_2;
+
+				$examineYear 	= trim($AllDataInSheet[$row]["E"]);
 
 				$examineSem 	= trim($AllDataInSheet[$row]["F"]);
 
@@ -166,7 +172,7 @@ function HandleExcelData($objPHPExcel){
 						$conn_db_ntu->exec($query_insert_fyp_assign);
 
 						//insert new records into fyp table
-						$query_insert_fyp = sprintf("INSERT IGNORE INTO %s (`project_id`, `acad_year`, `sem`, `title`,`Supervisor`,`staff_id`, `Area1`,`Area2`,`Area3`,`Area4`,`Area5`) VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') ",$TABLES['fyp'], $proj_id, $startYear_tmp,$startSem, $title, $supervisor,$staffID,$area1,$area2,$area3,$area4,$area5);
+						$query_insert_fyp = sprintf("INSERT IGNORE INTO %s (`project_id`, `acad_year`, `sem`, `title`,`Supervisor`,`staff_id`, `Area1`,`Area2`,`Area3`,`Area4`,`Area5`) VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') ",$TABLES['fyp'], $proj_id, $startYear,$startSem, $title, $supervisor,$staffID,$area1,$area2,$area3,$area4,$area5);
 						$conn_db_ntu->exec($query_insert_fyp);
 
 					}
