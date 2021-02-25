@@ -205,6 +205,17 @@ $objPHPExcel->getActiveSheet()->fromArray($headers, NULL, 'A1');
 $objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
 
 $rowCount = 2;	//First Data Row, excluding header
+
+// Find current Sem
+$cur_month = substr($exam_dates[0], -7, 2);
+if($cur_month == "01" || $cur_month == "02" || $cur_month == "03" || $cur_month == "04" || $cur_month == "05" || $cur_month == "06" || $cur_month == "07")
+{
+	$cur_sem = 2;
+}
+else {
+	$cur_sem = 1;
+}
+
 foreach ($projectList as $project)
 {
 	if ( !$project->hasValidTimeSlot() ) continue;
@@ -334,7 +345,12 @@ foreach ($examining_staff as $staff) {
 	$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $staff['email']);
 	$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $staff['name']);
 	$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount, $staff['workload']);
-	$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemption']);
+	if($cur_sem == 2){
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemptionS2']);
+	}
+	else{
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemption']);
+	}
 	foreach($supervising_load as $supervising) {
 		if ($supervising['staff_id'] == $staff['id']) {
 			if ($supervising['supervising_count']==null || $supervising['supervising_count']=="") {
