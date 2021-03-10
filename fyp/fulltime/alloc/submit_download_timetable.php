@@ -320,7 +320,19 @@ foreach ($unallocated_projects as $project)
 
 //Autosize Sheet 2
 autosize_currentSheet();
+$date = date("M");
+if(!isset($_REQUEST["filter_Sem"]) )
+{
+	if($date == "Jan" || $date == "Feb" || $date =="Mar" ||$date == "Apr" || $date =="May" ||$date == "Jun" ||$date == "Jul")
+	{
 
+			$_SESSION["semester"] = 2;
+	}else if( $date == "Aug" || $date == "Sep" || $date == "Oct"  || $date == "Nov" || $date == "Dec" )
+	{
+
+			$_SESSION["semester"]= 1;
+	}
+}
 // Sheet 3 - staff load
 $objPHPExcel->createSheet();
 $objPHPExcel->setActiveSheetIndex(2);
@@ -334,7 +346,19 @@ foreach ($examining_staff as $staff) {
 	$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $staff['email']);
 	$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $staff['name']);
 	$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount, $staff['workload']);
-	$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemption']);
+	/*
+	Wee Teck Zong [12.06.2020]
+	- Check current month of the year and retrieve either exemption semester 1 or semester 2 accordingly.
+	- */
+	$date = date("M");
+	if($date == "Jan" || $date == "Feb" || $date =="Mar" ||$date == "Apr" || $date =="May" ||$date == "Jun" ||$date == "Jul")
+	{
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemptionS2']);
+	}
+	else if( $date == "Aug" || $date == "Sep" || $date == "Oct"  || $date == "Nov" || $date == "Dec" )
+	{
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $staff['exemption']);
+	}
 	foreach($supervising_load as $supervising) {
 		if ($supervising['staff_id'] == $staff['id']) {
 			if ($supervising['supervising_count']==null || $supervising['supervising_count']=="") {
@@ -356,7 +380,14 @@ foreach ($examining_staff as $staff) {
 			}
 		}
 	}
-	$totalLoad = $objPHPExcel->getActiveSheet()->getCell('D'.$rowCount)->getValue() + $objPHPExcel->getActiveSheet()->getCell('G'.$rowCount)->getValue();
+	/*
+	Wee Teck Zong [12.06.2020]
+	- Calculating the Total Load after assignemnt using formular [ (Supervising Project * 3 ) + examining project + exemption] / Avg work load * 100%
+	- */
+
+	$totalLoad = ( ($objPHPExcel->getActiveSheet()->getCell('F'.$rowCount)->getValue() * 3) + $objPHPExcel->getActiveSheet()->getCell('E'.$rowCount)->getValue() + $objPHPExcel->getActiveSheet()->getCell('G'.$rowCount)->getValue()) / 60;
+	$totalLoad =  ($totalLoad * 100) + $objPHPExcel->getActiveSheet()->getCell('D'.$rowCount)->getValue();
+	$totalLoad = round($totalLoad, 0) ;
 	$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, $totalLoad);
 
 	foreach($preferredProjects as $preferred) {
