@@ -108,6 +108,7 @@ $query_rsStaff 			= "SELECT * FROM " . $TABLES['staff'];
 
 $query_totalRecords = "SELECT COUNT(DISTINCT staff_id) as total FROM " . $TABLES['research_interest'];
 
+
 /*
 if (isset($_POST['filter_StaffID'])) {
   $query_rsResearchInterestForStaff = "SELECT name, staff_id, GROUP_CONCAT(interest) AS interests FROM " . $TABLES['research_interest'] .
@@ -138,7 +139,7 @@ try {
     $stmt_1->bindParam(2, $filter_Search);
     $stmt_1->bindParam(3, $filter_Search);
     $stmt_1->bindParam(4, $filter_Search);
-  
+
     $stmt_1->execute();
     $rsResearchInterest = $stmt_1->fetchAll(PDO::FETCH_ASSOC);
     $AL_Staff_Filter 		= array();

@@ -385,8 +385,8 @@ foreach ($examining_staff as $staff) {
 	- Calculating the Total Load after assignemnt using formular [ (Supervising Project * 3 ) + examining project + exemption] / Avg work load * 100%
 	- */
 
-	$totalLoad = ( ($objPHPExcel->getActiveSheet()->getCell('F'.$rowCount)->getValue() * 3) + $objPHPExcel->getActiveSheet()->getCell('E'.$rowCount)->getValue() + $objPHPExcel->getActiveSheet()->getCell('G'.$rowCount)->getValue()) / 60;
-	$totalLoad =  ($totalLoad * 100) + $objPHPExcel->getActiveSheet()->getCell('D'.$rowCount)->getValue();
+	$totalLoad = ( ($objPHPExcel->getActiveSheet()->getCell('F'.$rowCount)->getValue() * 3) + $objPHPExcel->getActiveSheet()->getCell('E'.$rowCount)->getValue() + $objPHPExcel->getActiveSheet()->getCell('G'.$rowCount)->getValue()) / 60 *100;
+	// $totalLoad =  ($totalLoad * 100) + $objPHPExcel->getActiveSheet()->getCell('D'.$rowCount)->getValue();
 	$totalLoad = round($totalLoad, 0) ;
 	$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, $totalLoad);
 
