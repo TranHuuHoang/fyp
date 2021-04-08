@@ -174,6 +174,7 @@ function HandleExcelData_ExaminerList($error_code, $InputFile_FullPath, $Exempti
             if (isset($EXCEL_AllData[$RowIndex]["D"]) && !empty($EXCEL_AllData[$RowIndex]["D"])) {
                 $EXCEL_StaffEmail = strtolower(trim($EXCEL_AllData[$RowIndex]["D"]));
                 $EXCEL_StaffName = trim($EXCEL_AllData[$RowIndex]["B"]);
+                $EXCEL_StaffName2 = trim($EXCEL_AllData[$RowIndex]["C"]);
                 $EXCEL_StaffID = explode("@", $EXCEL_StaffEmail)[0];
                 $EXCEL_Loading = intval(explode("%", $EXCEL_AllData[$RowIndex]["G"])[0]);
 
@@ -247,7 +248,7 @@ function HandleExcelData_ExaminerList($error_code, $InputFile_FullPath, $Exempti
 
 
                 if ($sem == 2) {
-                    findExaminersInExemption($ExemptionFile_FullPath, $EXCEL_StaffName,$EXCEL_StaffEmail,$missingExaminerInExemption);
+                    findExaminersInExemption($ExemptionFile_FullPath, $EXCEL_StaffName, $EXCEL_StaffName2, $EXCEL_StaffEmail,$missingExaminerInExemption);
                 }
 
 
@@ -310,7 +311,7 @@ function getFacultySize($ExaminerFile_FullPath) {
 }
 
 // finds missing examiners in exemption file to prompt
-function findExaminersInExemption($ExemptionFile_FullPath,$staffName,$staffEmail,&$missingExaminerInExemption) {
+function findExaminersInExemption($ExemptionFile_FullPath,$staffName,$staffName2,$staffEmail,&$missingExaminerInExemption) {
 
     $PHPExcelObj = \PhpOffice\PhpSpreadsheet\IOFactory::load($ExemptionFile_FullPath);
     $EXCEL_AllData = $PHPExcelObj->getActiveSheet()->toArray(null, true, true, true);
@@ -327,6 +328,12 @@ function findExaminersInExemption($ExemptionFile_FullPath,$staffName,$staffEmail
             if (isset($EXCEL_AllData[$RowIndex]["B"]) && !empty($EXCEL_AllData[$RowIndex]["B"])) {
                 if (strtolower(trim($staffName)) == strtolower(trim($EXCEL_AllData[$RowIndex]["B"]))) {
                     $found = true;
+                }
+                // Check with name 2 in the database. Ommiting Title ("Dr", "Prof", etc.)
+                else {
+                    $pattern = "/" . strtolower(trim($EXCEL_AllData[$RowIndex]["B"])) . "/i";
+                    if(preg_match($pattern, strtolower(trim($staffName2))))
+                        $found = true;
                 }
 
             }

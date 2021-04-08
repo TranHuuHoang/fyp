@@ -83,7 +83,7 @@ function HandleExcelData_Exemption($error_code, $ExemptionFile_FullPath, $Master
 
 
                     // Check if the user input name is in staff table
-                    $Stmt = sprintf("SELECT * FROM  %s WHERE examine=1 AND (name = '%s' OR name2 ='%s')", $TABLES["staff"], $nameList[$counter], $nameList[$counter]);
+                    $Stmt = sprintf("SELECT * FROM  %s WHERE examine=1 AND (name LIKE '%s' OR name2 LIKE '%s')", $TABLES["staff"], $nameList."%", $nameList."%");
                     $DBOBJ_Result = $conn_db_ntu->prepare($Stmt);
                     $DBOBJ_Result->execute();
                     $Data = $DBOBJ_Result->fetch(PDO::FETCH_ASSOC);
@@ -93,7 +93,7 @@ function HandleExcelData_Exemption($error_code, $ExemptionFile_FullPath, $Master
                         $ProjectsExaminedinS1 = is_numeric($EXCEL_AllData[$RowIndex]["E"]) ? $EXCEL_AllData[$RowIndex]["E"] : 0;
                         $MScSupervised = 0;
                         $MScExamined = 0;
-                        HandleExcelData_Master($error_code, $MasterFile_FullPath, $nameList[$counter], $_POST["mnameList"][$counter] , $MScSupervised, $MScExamined);
+                        HandleExcelData_Master($error_code, $MasterFile_FullPath, $nameList, $_POST["mnameList"][$counter] , $MScSupervised, $MScExamined);
 
                         // exemption formula for sem 2
                         $exemption = intval(floor(doubleval($_SESSION["S2base"]) * (1 - ($Data['workload'] / 100)) + (($ProjectsSupervised + $MScSupervised) * 3) + $ProjectsExaminedinS1 + $MScExamined));
